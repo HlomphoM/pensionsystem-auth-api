@@ -1,0 +1,1 @@
+const String thelogo = 'assets/onboarding_images/296658.jpg';
