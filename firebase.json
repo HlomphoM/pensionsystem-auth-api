@@ -1,0 +1,41 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "flutterpensionregistration",
+          "appId": "1:650643344763:android:d475814918a44b2c0081de",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "flutterpensionregistration",
+          "configurations": {
+            "android": "1:650643344763:android:d475814918a44b2c0081de",
+            "ios": "1:650643344763:ios:6a6b292ea22e28ca0081de",
+            "macos": "1:650643344763:ios:6a6b292ea22e28ca0081de",
+            "web": "1:650643344763:web:5732a9947a4ffa610081de",
+            "windows": "1:650643344763:web:381d2591aef633b80081de"
+          }
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ],
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run lint"
+      ]
+    }
+  ]
+}
