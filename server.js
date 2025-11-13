@@ -42,6 +42,7 @@ app.post('/phonelogin', async (req, res) => {
         expiresAt: Date.now() + 5 * 60 * 1000 // 5 minutes
       });
 
+      const formattedNumber = '+266' + phoneNumber.replace(/^0+/, '');
       await client.messages.create({
         to: phoneNumber,
         body: `Your OTP code is: ${otp}`,
@@ -84,7 +85,7 @@ app.post('/verify-otp', async (req, res) => {
   const { phoneNumber, code } = req.body;
 
   try {
-    const otpDoc = await db.collection('otp').doc(phoneNumber).get();
+    const otpDoc = await db.collection('otpgen').doc(phoneNumber).get();
 
     if (!otpDoc.exists) {
       return res.status(404).json({ message: 'OTP not found' });
