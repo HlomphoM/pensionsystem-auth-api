@@ -32,9 +32,7 @@ class AdminHomePage extends StatelessWidget {
             ), 
           ),
           
-            const SizedBox(
-              width: 20
-            ),
+            const SizedBox(height: 20),
 
             Expanded(
             child: SizedBox(
@@ -61,8 +59,8 @@ class AdminHomePage extends StatelessWidget {
 
           const SizedBox(height: 20),
 
-              Row
-                (children: [
+        Row
+          (children: [
             Expanded(
             child: SizedBox(
               child: GestureDetector(
@@ -83,11 +81,10 @@ class AdminHomePage extends StatelessWidget {
               ),
             ), 
           ),
-            const SizedBox(
-              width: 20
-            ),
 
-            Expanded(
+            const SizedBox(height: 20),
+
+          Expanded(
             child: SizedBox(
               child: GestureDetector(
                 onTap: () {
@@ -112,8 +109,8 @@ class AdminHomePage extends StatelessWidget {
 
           const SizedBox(height: 20),
           
-                        Row
-                (children: [
+        Row
+          (children: [
             Expanded(
             child: SizedBox(
               child: GestureDetector(
@@ -163,25 +160,26 @@ class AdminHomePage extends StatelessWidget {
         ),
 
         const SizedBox(height: 20),
+
         Flexible(
-  child: Card(
-    elevation: 5,
-    color: Colors.green,
-    child: InkWell(
-      onTap: () async {
-        await FirebaseAuth.instance.signOut(); 
-        Navigator.pushNamedAndRemoveUntil(context, '/onboarding', (route) => false); 
-      },
-      child: const Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Text(
-          'Log Out',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 20,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
+          child: Card(
+            elevation: 5,
+            color: Colors.green,
+            child: InkWell(
+              onTap: () async {
+                await FirebaseAuth.instance.signOut(); 
+                Navigator.pushNamedAndRemoveUntil(context, '/onboarding', (route) => false); 
+              },
+              child: const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Text(
+                  'Log Out',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
         ),
       ),
     ),

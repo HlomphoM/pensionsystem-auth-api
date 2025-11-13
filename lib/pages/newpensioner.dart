@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_application_1/services/firestore.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class NewPensionerPage extends StatefulWidget {
   const NewPensionerPage({super.key});
@@ -150,7 +152,7 @@ class _NewPensionerPageState extends State<NewPensionerPage> {
               TextFormField(
               controller: idNumberController,
               decoration: const InputDecoration(labelText: 'ID Number'),
-              maxLength: 13, // Optional: restrict input length visually
+              maxLength: 13, 
               keyboardType: TextInputType.number,
               validator: (value) {
                 if (value == null || value.isEmpty) {

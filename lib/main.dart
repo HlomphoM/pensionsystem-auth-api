@@ -7,6 +7,7 @@ import 'package:flutter_application_1/pages/newcomplaint.dart';
 import 'package:flutter_application_1/pages/newpensionerSes.dart';
 import 'pages/adminprofoverview.dart';
 import 'pages/intermediate.dart';
+import 'pages/mywithdrawals.dart';
 import 'pages/intermediateSes.dart';
 import 'pages/adminpaymenthistory.dart';
 import 'pages/adminhome.dart';
@@ -73,7 +74,8 @@ class MyApp extends StatelessWidget {
         '/expandedComplaint': (context) => const ComplaintDetailsPage(),
         //'/mycomplaints': (context) => const SubmittedComplaintsPage(),
         //'/mycomplaintsSesotho': (context) => const SubmittedComplaintsSesotho(),
-        '/issuepayment': (context) => IssuePaymentPage()
+        '/issuepayment': (context) => IssuePaymentPage(),
+        '/mywithdrawals': (context) => const Withdrawals(),
 
       },
     );

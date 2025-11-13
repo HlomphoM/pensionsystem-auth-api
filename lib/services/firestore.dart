@@ -11,6 +11,26 @@ class FirestoreService {
   final DocumentReference systemBalanceRef = FirebaseFirestore.instance.collection('payouthistory').doc('systemBalance');
 
   //CREATE
+Future<void> addPensioner(String pensionerNames, String pin, String title, String gender, String idNumber, dateOfBirth, phoneNumber, String location, String guardianNames, String guardianRelationship, String guardianNumber, {String status = 'Active', double balance = 0.00}) {
+    return pensioners.add ({
+      'pensionerNames': pensionerNames,
+      'pin' : pin,
+      'title': title,
+      'gender': gender,
+      'idNumber': idNumber,
+      'dateOfBirth' : dateOfBirth,
+      'phoneNumber' : phoneNumber,
+      'location' : location,
+      'guardianNames' : guardianNames,
+      'guardianRelationship': guardianRelationship,
+      'guardianNumber' : guardianNumber,
+      'dateJoined': FieldValue.serverTimestamp(),
+      'status': status,
+      'balance': balance
+  });
+}
+
+
   Future<void> addComplaint(String pensionerNames, String complaintBody) {
     final docRef = complaints.doc();
     return docRef.set({
@@ -38,7 +58,7 @@ class FirestoreService {
     }, SetOptions(merge: true));
   }
 
-Future<void> addPensioner(String pensionerNames, String pin, String title, String gender, String idNumber, dateOfBirth, phoneNumber, String location, String guardianNames, String guardianRelationship, String guardianNumber, {String status = 'Active', double balance = 0.00, int }) {
+/*Future<void> addPensioner(String pensionerNames, String pin, String title, String gender, String idNumber, dateOfBirth, phoneNumber, String location, String guardianNames, String guardianRelationship, String guardianNumber, {String status = 'Active', double balance = 0.00, int }) {
     return pensioners.add ({
       'pensionerNames': pensionerNames,
       'pin' : pin,
@@ -55,7 +75,7 @@ Future<void> addPensioner(String pensionerNames, String pin, String title, Strin
       'status': status,
       'balance': balance
   });
-}
+}*/
 
 Future<void> addPayout(String pensionerNames, double payoutAmount, {String sender = 'admin'}) {
   final docRef = payouthistory.doc();      

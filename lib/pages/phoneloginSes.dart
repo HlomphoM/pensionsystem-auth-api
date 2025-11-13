@@ -30,9 +30,7 @@ class _PensionerLoginPageState extends State<PensionerLoginPage> {
       if (snapshot.docs.isNotEmpty) {
         final pensioner = snapshot.docs.first;
         Navigator.pushReplacementNamed(
-          context,
-          '/userhome',
-          arguments: pensioner,
+          context, '/userhome', arguments: pensioner,
         );
       } else {
         setState(() => _error = 'Invalid phone number or PIN');
@@ -54,13 +52,13 @@ class _PensionerLoginPageState extends State<PensionerLoginPage> {
           children: [
             TextField(
               controller: _phoneController,
-              decoration: const InputDecoration(labelText: 'Phone Number'),
+              decoration: const InputDecoration(labelText: 'Linomoro tsa mohala'),
               keyboardType: TextInputType.phone,
             ),
             const SizedBox(height: 12),
             TextField(
               controller: _pinController,
-              decoration: const InputDecoration(labelText: 'PIN'),
+              decoration: const InputDecoration(labelText: 'Linomoro tsa lekunutu'),
               obscureText: true,
               keyboardType: TextInputType.number,
             ),

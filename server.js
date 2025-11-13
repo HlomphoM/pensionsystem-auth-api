@@ -1,6 +1,8 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const db = require('./firebase');
+const { default: axios } = require('axios');
 
 const app = express();
 app.use(cors());
@@ -12,6 +14,7 @@ app.post('/phonelogin', async (req, res) => {
   try {
     const snapshot = await db.collection('pensioners')
       .where('phoneNumber', '==', phoneNumber)
+      .where('status', '==', 'Active')
       .limit(1)
       .get();
 
@@ -22,12 +25,25 @@ app.post('/phonelogin', async (req, res) => {
     const doc = snapshot.docs[0];
     const data = doc.data();
 
-    if (data.activity === 'Blocked') {
+    if (data.status === 'Blocked') {
       return res.status(403).json({ message: 'Account is blocked' });
     }
 
     if (data.pin === pin) {
       await doc.ref.update({ loginAttempts: 0 });
+
+      const otp = crypto.randomInt(100000, 999999).toString();
+      await db.collection('otpgen').doc(phoneNumber).set({
+        code: otp,
+        expiresAt: Date.now() + 5 * 60 * 1000 // 5 minutes
+      });
+
+      await axios.post('https://api.wasms.net/send', {
+        to: phoneNumber,
+        message: `Your OTP code is: ${otp}`,
+        api_key: process.env.WASMS_API_KEY,
+        sender_id: process.env.WASMS_SENDER_ID
+      });
 
       return res.status(200).json({
         message: 'Login successful',
@@ -39,7 +55,7 @@ app.post('/phonelogin', async (req, res) => {
     } else {
       const attempts = (data.loginAttempts || 0) + 1;
       const updates = { loginAttempts: attempts };
-      if (attempts >= 5) updates.activity = 'Blocked';
+      if (attempts >= 5) updates.status = 'Blocked';
 
       await doc.ref.update(updates);
 
@@ -58,3 +74,102 @@ app.post('/phonelogin', async (req, res) => {
 app.listen(3000, () => {
   console.log('Server running on http://localhost:3000');
 });
+
+//
+
+app.post('/phoneloginSes', async (req, res) => {
+  const { phoneNumber, pin } = req.body;
+
+  try {
+    const snapshot = await db.collection('pensioners')
+      .where('phoneNumber', '==', phoneNumber)
+      .limit(1)
+      .get();
+
+    if (snapshot.empty) {
+      return res.status(404).json({ message: 'Mokholi ea joalo ha a fumanehe.' });
+    }
+
+    const doc = snapshot.docs[0];
+    const data = doc.data();
+
+    if (data.status === 'Blocked') {
+      return res.status(403).json({ message: 'Mokholi o kibuoe.' });
+    }
+
+    if (data.pin === pin) {
+      await doc.ref.update({ loginAttempts: 0 });
+
+      return res.status(200).json({
+        message: 'U se u kene akhaontong ea hau.',
+        id: doc.id,
+        name: data.name,
+        phoneNumber: data.phoneNumber,
+        activity: data.activity
+      });
+    } else {
+      const attempts = (data.loginAttempts || 0) + 1;
+      const updates = { loginAttempts: attempts };
+      if (attempts >= 5) updates.status = 'Blocked';
+
+      await doc.ref.update(updates);
+
+      return res.status(401).json({
+        message: 'U fositse linomoro tsa hau tsa lekunutu.',
+        attempts,
+        blocked: attempts >= 5
+      });
+    }
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+app.listen(3000, () => {
+  console.log('Server running on http://localhost:3000');
+});
+
+/*
+
+const axios = require('axios');
+
+app.post('/registerPensioner', async (req, res) => {
+  const {
+    pensionerNames, pin, title, gender, idNumber, dateOfBirth,
+    phoneNumber, location, guardianNames, guardianRelationship, guardianNumber
+  } = req.body;
+
+  try {
+    const docRef = await db.collection('pensioners').add({
+      pensionerNames,
+      pin,
+      title,
+      gender,
+      idNumber,
+      dateOfBirth,
+      phoneNumber,
+      location,
+      guardianNames,
+      guardianRelationship,
+      guardianNumber,
+      dateJoined: new Date(),
+      status: 'Active',
+      balance: 0.00,
+      loginAttempts: 0
+    });
+
+    // Send SMS via WaSMS.net
+    await axios.post('https://api.wasms.net/send', {
+      api_key: process.env.WASMS_API_KEY,
+      device_id: process.env.WASMS_DEVICE_ID,
+      phone: phoneNumber,
+      message: `Hello ${pensionerNames}, your registration is successful. Welcome to the Pension System!`
+    });
+
+    res.status(201).json({ message: 'Pensioner registered and SMS sent', id: docRef.id });
+  } catch (error) {
+    console.error('Registration error:', error);
+    res.status(500).json({ message: 'Registration failed', error: error.message });
+  }
+});*/

@@ -64,7 +64,7 @@ class AdminHomeSesothoPage extends StatelessWidget {
             SizedBox(
               child: GestureDetector(
                 onTap: () {
-                 Navigator.pushNamed(context, '/allpensioners');
+                 Navigator.pushNamed(context, '/allpensionersSes');
                 },
                 child: Card(
                   elevation: 4,
@@ -112,7 +112,7 @@ class AdminHomeSesothoPage extends StatelessWidget {
             SizedBox(
               child: GestureDetector(
                 onTap: () {
-                 Navigator.pushNamed(context, '/adminprofoverview');
+                 Navigator.pushNamed(context, '/adminpaymenthistorySes');
                 },
                 child: Card(
                   elevation: 4,
@@ -136,7 +136,7 @@ class AdminHomeSesothoPage extends StatelessWidget {
             SizedBox(
               child: GestureDetector(
                 onTap: () {
-                 Navigator.pushNamed(context, '/issuepayment');
+                 Navigator.pushNamed(context, '/issuepaymentSes');
                 },
                 child: Card(
                   elevation: 4,
