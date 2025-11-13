@@ -10,8 +10,8 @@ class PensionerLoginPage extends StatefulWidget {
 }
 
 class _PensionerLoginPageState extends State<PensionerLoginPage> {
-  final _phoneController = TextEditingController();
-  final _pinController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _pinController = TextEditingController();
 
   bool _loading = false;
   String? _error;
@@ -38,7 +38,11 @@ class _PensionerLoginPageState extends State<PensionerLoginPage> {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('loggedInPensionerId', responseData['id']);
 
-        Navigator.pushReplacementNamed(context, '/userhome');
+        Navigator.pushReplacementNamed(
+          context,
+          '/userhome',
+          arguments: responseData,
+        );
       } else {
         setState(() => _error = responseData['message'] ?? 'Login failed');
       }
@@ -73,13 +77,16 @@ class _PensionerLoginPageState extends State<PensionerLoginPage> {
                     keyboardType: TextInputType.number,
                   ),
                   const SizedBox(height: 24),
+                  if (_loading) const CircularProgressIndicator(),
+                  if (_error != null)
+                    Text(
+                      _error!,
+                      style: const TextStyle(color: Colors.red),
+                    ),
                   ElevatedButton(
                     onPressed: _loading ? null : _login,
                     child: const Text('Login'),
                   ),
-                  if (_loading) const CircularProgressIndicator(),
-                  if (_error != null)
-                    Text(_error!, style: const TextStyle(color: Colors.red)),
                 ],
               ),
             ),
