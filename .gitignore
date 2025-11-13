@@ -3,3 +3,4 @@ firebase-key.json
 build/
 pensionsystem-auth-api/
 server.js.json
+.env
