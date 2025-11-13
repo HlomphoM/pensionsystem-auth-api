@@ -24,7 +24,7 @@ class _PensionerLoginPageState extends State<PensionerLoginPage> {
 
     try {
       final response = await http.post(
-        Uri.parse('https://pensionsystem-auth-api.onrender.com/verify-otp'),
+        Uri.parse('https://pensionsystem-auth-api.onrender.com/phonelogin'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'phoneNumber': _phoneController.text.trim(),
