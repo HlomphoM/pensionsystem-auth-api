@@ -26,7 +26,6 @@ class _LoginPageState extends State<LoginPageSesotho> {
         password: _passwordController.text.trim(),
       );
 
-      // Navigate to home or dashboard
       Navigator.pushReplacementNamed(context, '/adminhomeSesotho');
     } catch (e) {
       setState(() {

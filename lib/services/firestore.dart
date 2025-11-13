@@ -4,13 +4,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
-  //get collection
+  
   final CollectionReference complaints = FirebaseFirestore.instance.collection('complaints');
   final CollectionReference pensioners = FirebaseFirestore.instance.collection('pensioners');
   final CollectionReference payouthistory = FirebaseFirestore.instance.collection('payouthistory');
   final DocumentReference systemBalanceRef = FirebaseFirestore.instance.collection('payouthistory').doc('systemBalance');
 
-  //CREATE
+  
 Future<void> addPensioner(String pensionerNames, String pin, String title, String gender, String idNumber, dateOfBirth, phoneNumber, String location, String guardianNames, String guardianRelationship, String guardianNumber, {String status = 'Active', double balance = 0.00}) {
     return pensioners.add ({
       'pensionerNames': pensionerNames,
@@ -58,24 +58,7 @@ Future<void> addPensioner(String pensionerNames, String pin, String title, Strin
     }, SetOptions(merge: true));
   }
 
-/*Future<void> addPensioner(String pensionerNames, String pin, String title, String gender, String idNumber, dateOfBirth, phoneNumber, String location, String guardianNames, String guardianRelationship, String guardianNumber, {String status = 'Active', double balance = 0.00, int }) {
-    return pensioners.add ({
-      'pensionerNames': pensionerNames,
-      'pin' : pin,
-      'title': title,
-      'gender': gender,
-      'idNumber': idNumber,
-      'dateOfBirth' : dateOfBirth,
-      'phoneNumber' : phoneNumber,
-      'location' : location,
-      'guardianNames' : guardianNames,
-      'guardianRelationship': guardianRelationship,
-      'guardianNumber' : guardianNumber,
-      'dateJoined': FieldValue.serverTimestamp(),
-      'status': status,
-      'balance': balance
-  });
-}*/
+
 
 Future<void> addPayout(String pensionerNames, double payoutAmount, {String sender = 'admin'}) {
   final docRef = payouthistory.doc();      
@@ -96,7 +79,6 @@ Future<void> addSchedule(String pensionMessage, pensionDate) {
   });
 }
 
-  //RETRIEVE
 
 Future<Map<String, dynamic>?> getPensionerById(String id) async {
     final doc = await pensioners.doc(id).get();
@@ -315,7 +297,7 @@ final rawDateResponded = data['dateResponded'];
     .map((snapshot) => snapshot.docs);
 }
 
-  //UPDATE
+  
 
   Future<void> respondToComplaint(String complaintNumber, String complaintResponse) {
     return complaints.doc(complaintNumber).set({

@@ -99,7 +99,7 @@ app.post('/verify-otp', async (req, res) => {
       return res.status(401).json({ message: 'Incorrect OTP' });
     }
 
-    await otpDoc.ref.delete(); // Clean up used OTP
+    await otpDoc.ref.delete(); 
 
     return res.status(200).json({ message: 'OTP verified' });
   } catch (error) {
@@ -162,46 +162,3 @@ app.listen(3000, () => {
   console.log('Server running on http://localhost:3000');
 });
 
-/*
-
-const axios = require('axios');
-
-app.post('/registerPensioner', async (req, res) => {
-  const {
-    pensionerNames, pin, title, gender, idNumber, dateOfBirth,
-    phoneNumber, location, guardianNames, guardianRelationship, guardianNumber
-  } = req.body;
-
-  try {
-    const docRef = await db.collection('pensioners').add({
-      pensionerNames,
-      pin,
-      title,
-      gender,
-      idNumber,
-      dateOfBirth,
-      phoneNumber,
-      location,
-      guardianNames,
-      guardianRelationship,
-      guardianNumber,
-      dateJoined: new Date(),
-      status: 'Active',
-      balance: 0.00,
-      loginAttempts: 0
-    });
-
-    // Send SMS via WaSMS.net
-    await axios.post('https://api.wasms.net/send', {
-      api_key: process.env.WASMS_API_KEY,
-      device_id: process.env.WASMS_DEVICE_ID,
-      phone: phoneNumber,
-      message: `Hello ${pensionerNames}, your registration is successful. Welcome to the Pension System!`
-    });
-
-    res.status(201).json({ message: 'Pensioner registered and SMS sent', id: docRef.id });
-  } catch (error) {
-    console.error('Registration error:', error);
-    res.status(500).json({ message: 'Registration failed', error: error.message });
-  }
-});*/
