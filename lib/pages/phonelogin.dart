@@ -66,8 +66,8 @@ Future<void> _verifyOtp(String otp) async {
       Uri.parse('https://pensionsystem-auth-api.onrender.com/verify-otp'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
-        'userId': _userId,
-        'otp': otp,
+        'phoneNumber': _phoneNumber,
+        'code': otp,
       }),
     );
 

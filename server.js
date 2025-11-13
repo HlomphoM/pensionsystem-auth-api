@@ -4,6 +4,9 @@ const cors = require('cors');
 const crypto = require('crypto');
 const db = require('./firebase');
 const { default: axios } = require('axios');
+const twilio = require('twilio');
+
+const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
 
 const app = express();
 app.use(cors());
@@ -39,11 +42,11 @@ app.post('/phonelogin', async (req, res) => {
         expiresAt: Date.now() + 5 * 60 * 1000 // 5 minutes
       });
 
-      await axios.post('https://api.wasms.net/send', {
+      await client.messages.create({
         to: phoneNumber,
-        message: `Your OTP code is: ${otp}`,
-        api_key: process.env.WASMS_API_KEY,
-        sender_id: process.env.WASMS_SENDER_ID
+        body: `Your OTP code is: ${otp}`,
+        from: process.env.TWILIO_PHONE_NUMBER,
+        to: phoneNumber,
       });
 
       return res.status(200).json({
