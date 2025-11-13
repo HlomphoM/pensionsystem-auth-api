@@ -6,7 +6,7 @@ const db = require('./firebase');
 const { default: axios } = require('axios');
 const twilio = require('twilio');
 
-const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
+//const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
 
 const app = express();
 app.use(cors());
@@ -35,20 +35,6 @@ app.post('/phonelogin', async (req, res) => {
 
     if (data.pin === pin) {
       await doc.ref.update({ loginAttempts: 0 });
-
-      const otp = crypto.randomInt(100000, 999999).toString();
-      await db.collection('otpgen').doc(phoneNumber).set({
-        code: otp,
-        expiresAt: Date.now() + 5 * 60 * 1000 // 5 minutes
-      });
-
-      const formattedNumber = '+266' + phoneNumber.replace(/^0+/, '');
-      await client.messages.create({
-        to: phoneNumber,
-        body: `Your OTP code is: ${otp}`,
-        from: process.env.TWILIO_PHONE_NUMBER,
-        to: phoneNumber,
-      });
 
       return res.status(200).json({
         message: 'Login successful',
@@ -80,34 +66,6 @@ app.listen(3000, () => {
   console.log('Server running on http://localhost:3000');
 });
 
-//
-app.post('/verify-otp', async (req, res) => {
-  const { phoneNumber, code } = req.body;
-
-  try {
-    const otpDoc = await db.collection('otpgen').doc(phoneNumber).get();
-
-    if (!otpDoc.exists) {
-      return res.status(404).json({ message: 'OTP not found' });
-    }
-
-    const data = otpDoc.data();
-    if (Date.now() > data.expiresAt) {
-      return res.status(410).json({ message: 'OTP expired' });
-    }
-
-    if (data.code !== code) {
-      return res.status(401).json({ message: 'Incorrect OTP' });
-    }
-
-    await otpDoc.ref.delete(); 
-
-    return res.status(200).json({ message: 'OTP verified' });
-  } catch (error) {
-    console.error('OTP verification error:', error);
-    res.status(500).json({ message: 'Server error', error: error.message });
-  }
-});
 //
 
 app.post('/phoneloginSes', async (req, res) => {
